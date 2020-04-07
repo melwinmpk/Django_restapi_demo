@@ -24,5 +24,6 @@ urlpatterns = [
     path('json/classexample2',JsonCBV2.as_view(), name=''),
     path('json/serialized/list',SerizlizedListView.as_view(), name=''),
     path('json/serialized/detail',SerizlizedDetailView.as_view(), name=''),
+    path('api/upadtes/',include('updates.api.urls')),
     path('admin/', admin.site.urls),
 ]

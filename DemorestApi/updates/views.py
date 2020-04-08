@@ -28,6 +28,15 @@ class JsonResponseMixin(object):
     def get_data(self, context):
         return context
 
+class HttpResponseMixin(object):
+    is_json = False
+
+    def render_to_response(self, data, status=200):
+        content_type = 'text/html'
+        if self.is_json:
+            content_type = 'application/json'
+        return HttpResponse(data, content_type=content_type, status=status)
+
 class JsonCBV2(JsonResponseMixin,View):
     def get(self, request, *args, **kwargs):
         data = {

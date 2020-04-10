@@ -1,8 +1,11 @@
 from django.views.generic import View
 from django.http import HttpResponse
 from updates.models import Update as UpdateModel
+
 from updates.views import HttpResponseMixin
+from updates.forms import UpdateModelForm
 from .mixins import CSRFExemptMixin
+from .utils import isjson_check
 import json
 
 class UpdateModelDetailAPIView(HttpResponseMixin, CSRFExemptMixin, View):
@@ -28,7 +31,7 @@ class UpdateModelDetailAPIView(HttpResponseMixin, CSRFExemptMixin, View):
         # return HttpResponse(json_date, content_type='application/json')
         return self.render_to_response(json_data)
     def post(self, request, *args, **kwargs):
-        json_data = {}
+        json_data = json.dumps({"message":"Not allowed, please use the /api/update/ endpoint"})
         return self.render_to_response(json_data, status=403)
 
     def put(self, request, id, *args, **kwargs):
@@ -38,6 +41,10 @@ class UpdateModelDetailAPIView(HttpResponseMixin, CSRFExemptMixin, View):
             return self.render_to_response(error_data, status=404)
         # print(dir(request))
         print(request.body)
+        if not isjson_check(request.body):
+            error_data = json.dumps({"message":"Invalid data set, please send using JSON."})
+            return self.render_to_response(error_data, status=400)
+
         new_data = json.loads(request.body)
         print(new_data['content'])
         # print(request.data)
@@ -66,8 +73,21 @@ class UpdateModelListAPIView(HttpResponseMixin ,CSRFExemptMixin, View):
         return self.render_to_response(json_data)
 
     def post(self, request, *args, **kwargs):
-
-        data = json.dumps({"message": "Unknown data"})
+        if not isjson_check(request.body):
+            error_data = json.dumps({"message":"Invalid data set, please send using JSON."})
+            return self.render_to_response(error_data, status=400)
+        data = json.loads(request.body)
+        print(request.POST)
+        form = UpdateModelForm(data)
+        if form.is_valid():
+            obj = form.save(commit=True)
+            obj_data = obj.serialize()
+            return self.render_to_response(obj_data, status=201)
+        if form.errors:
+            data = json.dumps(form.errors)
+            return self.render_to_response(data, status=400)
+        data = json.dumps({"message": "Not Allowed"})
+        # form = UpdateModelForm
         return self.render_to_response(data, status=400)
 
     def delete(self, request, *args, **kwargs):

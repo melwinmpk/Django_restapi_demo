@@ -10,25 +10,47 @@ class UpdateModelDetailAPIView(HttpResponseMixin, CSRFExemptMixin, View):
     Detail Retrive , Update, Delete --> Object
     '''
     is_json = True
+    def get_object(self, id=None):
+        qs = UpdateModel.objects.filter(id=id)
+        if qs.count() == 1:
+            return qs.first()
+        return None
+
     def get(self, request, id, *args, **kwargs):
         # print("HEY !!!!!")
         # print(request.GET['id'])
         # id = request.GET['id']
-        obj = UpdateModel.objects.get(id=id)
+        obj = self.get_object(id=id)
+        if obj is None:
+            error_data = json.dumps({"message": "Update not found"})
+            return self.render_to_response(error_data, status =404)
         json_data = obj.serialize()
         # return HttpResponse(json_date, content_type='application/json')
         return self.render_to_response(json_data)
     def post(self, request, *args, **kwargs):
         json_data = {}
+        return self.render_to_response(json_data, status=403)
+
+    def put(self, request, id, *args, **kwargs):
+        obj = self.get_object(id=id)
+        if obj is None:
+            error_data = json.dumps({"message": "Update not found"})
+            return self.render_to_response(error_data, status=404)
+        # print(dir(request))
+        print(request.body)
+        new_data = json.loads(request.body)
+        print(new_data['content'])
+        # print(request.data)
+        json_data = json.dumps({"mesaage":"Somthing"})
         return self.render_to_response(json_data)
 
-    def put(self, request, *args, **kwargs):
-        json_data = {}
-        return self.render_to_response(json_data)
-
-    def delete(self, request, *args, **kwargs):
-        json_data = {}
-        return self.render_to_response(json_data)
+    def delete(self, request, id, *args, **kwargs):
+        obj = self.get_object(id=id)
+        if obj is None:
+            error_data = json.dumps({"message": "Update not found"})
+            return self.render_to_response(error_data, status=403)
+        json_data = json.dumps({"mesaage":"Somthing1"})
+        return self.render_to_response(json_data, status=403)
 
 
 class UpdateModelListAPIView(HttpResponseMixin ,CSRFExemptMixin, View):

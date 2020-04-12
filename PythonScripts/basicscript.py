@@ -5,8 +5,11 @@ import requests
 BASE_URL = "http://127.0.0.1:8000/"
 ENDPOINT = "api/upadtes/"
 
-def get_list():
-    r = requests.get(BASE_URL + ENDPOINT)
+def get_list(id=None):
+    data = json.dumps({})
+    if id is not None:
+        data = json.dumps({"id": id})
+    r = requests.get(BASE_URL + ENDPOINT,data=data)
     print(r.status_code)
     data = r.json()
     print(data)
@@ -30,16 +33,17 @@ def create_update():
         return r.json()
     return r.text
 
-# get_list()
+get_list()
 
 # print(create_update())
 
 def do_obj_update():
     new_data = {
-        "content": "New obj data Very Good "
+        "id": 4,
+        "content": "New obj data Very Good123 "
     }
     print(BASE_URL + ENDPOINT + "1/")
-    r = requests.put(BASE_URL + ENDPOINT +"1", data=json.dumps(new_data)) # json.dumps(new_data)
+    r = requests.put(BASE_URL + ENDPOINT , data=json.dumps(new_data)) # json.dumps(new_data)
 
 
     # new_data = {
@@ -58,10 +62,10 @@ def do_obj_update():
 
 def do_obj_delete():
     new_data = {
-        "content": "New obj data "
+        "id": 12
     }
     print(BASE_URL + ENDPOINT + "12/")
-    r = requests.delete(BASE_URL + ENDPOINT +"6")
+    r = requests.delete(BASE_URL + ENDPOINT, data=json.dumps(new_data))
 
 
     # new_data = {
@@ -76,4 +80,4 @@ def do_obj_delete():
         return r.json()
     return r.text
 
-print(do_obj_delete())
+# print(do_obj_delete())

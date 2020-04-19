@@ -16,7 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from updates.views import json_example_view,JsonCBV,JsonCBV2,SerizlizedListView,SerizlizedDetailView
+from updates.views import (
+    json_example_view,
+    JsonCBV,JsonCBV2,
+    SerizlizedListView,
+    SerizlizedDetailView
+)
 
 urlpatterns = [
     path('json/example',json_example_view, name=''),
@@ -25,5 +30,6 @@ urlpatterns = [
     path('json/serialized/list',SerizlizedListView.as_view(), name=''),
     path('json/serialized/detail',SerizlizedDetailView.as_view(), name=''),
     path('api/upadtes/',include('updates.api.urls')),
+    path('api/status/',include('status.api.urls')),
     path('admin/', admin.site.urls),
 ]

@@ -39,6 +39,8 @@ data = {'user':1}
 serializer = StatusSerializer(data=data)
 if serializer.is_valid():
     serializer.save()
+else:
+    print(serializer.errors)
 '''
 Update Obj
 '''
@@ -57,6 +59,8 @@ data = {'user':1,'content':'please Delete Me'}
 create_obj = StatusSerializer(data=data)
 if create_obj.is_valid():
     create_obj.save()
+else:
+    print(create_obj.errors)
 print(create_obj)
 
 
@@ -66,3 +70,21 @@ update_serializer = StatusSerializer(obj)
 update_serializer.data
 
 obj.delete()
+
+
+
+
+'''
+Custome Validations!!!!!
+'''
+from rest_framework import serializers
+
+class CustomeSerializer(serializers.Serializer):
+    content = serializers.CharField()
+    email   = serializers.EmailField()
+
+data = {'email': 'hello@teamcfe.com', 'content': "please delete me"}
+create_obj_serializer = CustomeSerializer(data=data)
+if create_obj_serializer.is_valid():
+    valid_data = create_obj_serializer.data
+    print(valid_data)

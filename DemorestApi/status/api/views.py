@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, mixins
 from rest_framework.views import APIView
 from  rest_framework.response import Response
 from status.models import Status
@@ -19,7 +19,7 @@ class StatusListSearchAPIView(APIView):
         serializer = StatusSerializer(qs, many=True)
         return Response(serializer.data)
 
-class StatusAPIView(generics.ListAPIView):
+class StatusAPIView(mixins.CreateModelMixin, generics.ListAPIView):
     permission_classes          = []
     authentication_classes      = []
     # queryset                    = Status.objects.all()
@@ -31,6 +31,47 @@ class StatusAPIView(generics.ListAPIView):
         if query is not None:
             qs = qs.filter(content__icontains=query)
         return qs
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+'''
+    StatusDetailAPIView which is commented is equivalent to the StatusDetailAPIView which is not
+    uncommented one used mixins individually but the generic api view uses combined 
+    '''
+
+# class StatusDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+#     permission_classes = []
+#     authentication_classes = []
+#     queryset = Status.objects.all()
+#     serializer_class = StatusSerializer
+#     lookup_field = 'id'  # if the lookup_field is not defined then pk will be expected by default
+
+class StatusDetailAPIView(mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.RetrieveAPIView):
+    permission_classes          = []
+    authentication_classes      = []
+    queryset                    = Status.objects.all()
+    serializer_class            = StatusSerializer
+    lookup_field                = 'id' # if the lookup_field is not defined then pk will be expected by default
+
+    # def get_object(self, *args, **kwargs): # slug method for handeling the
+    #     kwargs = self.kwargs
+    #     kw_id  = kwargs.get('id')
+    #     return Status.objects.get(id=kw_id)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+'''
+    Currently not in use the below code
+'''
 
 class StatusCreateAPIView(generics.CreateAPIView):
     permission_classes          = []
@@ -44,18 +85,6 @@ class StatusCreateAPIView(generics.CreateAPIView):
     #     if query is not None:
     #         qs = qs.filter(content__icontains=query)
     #     return qs
-
-class StatusDetailAPIView(generics.RetrieveAPIView):
-    permission_classes          = []
-    authentication_classes      = []
-    queryset                    = Status.objects.all()
-    serializer_class            = StatusSerializer
-    lookup_field                = 'id' # if the lookup_field is not defined then pk will be expected by default
-
-    # def get_object(self, *args, **kwargs): # slug method for handeling the
-    #     kwargs = self.kwargs
-    #     kw_id  = kwargs.get('id')
-    #     return Status.objects.get(id=kw_id)
 
 class StatusUpdateAPIView(generics.UpdateAPIView):
     permission_classes          = []

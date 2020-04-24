@@ -56,3 +56,17 @@ class StatusDetailAPIView(generics.RetrieveAPIView):
     #     kwargs = self.kwargs
     #     kw_id  = kwargs.get('id')
     #     return Status.objects.get(id=kw_id)
+
+class StatusUpdateAPIView(generics.UpdateAPIView):
+    permission_classes          = []
+    authentication_classes      = []
+    queryset                    = Status.objects.all()
+    serializer_class            = StatusSerializer
+    lookup_field = 'id'  # if the lookup_field is not defined then pk will be expected by default
+
+class StatusDeleteAPIView(generics.DestroyAPIView):
+    permission_classes          = []
+    authentication_classes      = []
+    queryset                    = Status.objects.all()
+    serializer_class            = StatusSerializer
+    lookup_field = 'id'  # if the lookup_field is not defined then pk will be expected by default

@@ -1,4 +1,5 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, permissions
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
 from  rest_framework.response import Response
 from status.models import Status
@@ -43,12 +44,9 @@ class StatusDetailAPIView(
 
 class StatusAPIView(
     mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
     generics.ListAPIView):
-    permission_classes          = []
-    authentication_classes      = []
+    permission_classes          = [permissions.IsAuthenticatedOrReadOnly] # IsAuthenticated
+    authentication_classes      = [SessionAuthentication]
     # queryset                    = Status.objects.all()
     serializer_class            = StatusSerializer
     passed_id                   = None

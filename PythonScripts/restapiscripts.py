@@ -2,9 +2,52 @@ import requests
 import json
 import os
 
+AUTH_ENDPOINT = "http://127.0.0.1:8000/api/auth/jwt/"
+REFRESHAUTH_ENDPOINT = "http://127.0.0.1:8000/api/auth/jwt/refresh/"
 ENDPOINT = "http://127.0.0.1:8000/api/status/"
 image_path = os.path.join(os.getcwd(), 'Screenshot(86).png')
 
+
+auth_data = {
+    'username': 'admin',
+    'password': '#welcome123'
+}
+
+r= requests.post(AUTH_ENDPOINT, data=auth_data)
+# print()
+token = r.json()['token']
+post_headers = {
+    'Content-Type': 'application/json'
+}
+
+refreshauth_data = {
+    'token': token
+}
+
+tokrnrefresh_request = requests.post(REFRESHAUTH_ENDPOINT, data=json.dumps(refreshauth_data), headers=post_headers)
+
+print(tokrnrefresh_request.json())
+
+# get_endpoint = ENDPOINT + str(12)
+# post_data = json.dumps({"content": "Some random content"})
+#
+# r = requests.get(get_endpoint)
+# print(r.text)
+#
+# r2 = requests.get(ENDPOINT)
+# print(r2.status_code)
+#
+# post_headers = {
+#     'content-type': 'application/json'
+# }
+#
+# post_method   = requests.post(ENDPOINT, data=json.dumps(post_data), headers=post_headers)
+# print(post_method.text)
+
+
+
+
+''' Below code are Currently not Used '''
 def do_img(method='get', data={}, is_json=True, image_path=None):
     headers = {}
     URL = ENDPOINT # + "?id=" + str(id)
@@ -24,7 +67,7 @@ def do_img(method='get', data={}, is_json=True, image_path=None):
     return r
 
 # do_img(method='post', data={'user':1, 'content': ""}, is_json=False, image_path=image_path)
-do_img(method='put', data={'id':9,'user':1, 'content': "Somthin Good is Yest To come"}, is_json=False, image_path=image_path)
+# do_img(method='put', data={'id':9,'user':1, 'content': "Somthin Good is Yest To come"}, is_json=False, image_path=image_path)
 
 def do(method='get', data={}, is_json=True):
     headers = {}

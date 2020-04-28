@@ -21,8 +21,8 @@ class StatusDetailAPIView(
     mixins.DestroyModelMixin,
     mixins.UpdateModelMixin,
     generics.RetrieveAPIView):
-    permission_classes          = []
-    authentication_classes      = []
+    permission_classes          = [permissions.IsAuthenticatedOrReadOnly] # IsAuthenticated
+    # authentication_classes      = []
     # queryset                    = Status.objects.all()
     serializer_class            = StatusSerializer
     lookup_field                = 'id' # if the lookup_field is not defined then pk will be expected by default
@@ -46,7 +46,7 @@ class StatusAPIView(
     mixins.CreateModelMixin,
     generics.ListAPIView):
     permission_classes          = [permissions.IsAuthenticatedOrReadOnly] # IsAuthenticated
-    authentication_classes      = [SessionAuthentication]
+    # authentication_classes      = [SessionAuthentication]
     # queryset                    = Status.objects.all()
     serializer_class            = StatusSerializer
     passed_id                   = None
@@ -75,8 +75,8 @@ class StatusAPIView(
     Currently not in use the below code
 '''
 class StatusListSearchAPIView(APIView):
-    permission_classes          = []
-    authentication_classes      = []
+    # permission_classes          = []
+    # authentication_classes      = []
 
     def get(self, request, format=None):
         qs = Status.objects.all()
@@ -89,8 +89,8 @@ class StatusListSearchAPIView(APIView):
         return Response(serializer.data)
 
 class StatusCreateAPIView(generics.CreateAPIView):
-    permission_classes          = []
-    authentication_classes      = []
+    # permission_classes          = []
+    # authentication_classes      = []
     queryset                    = Status.objects.all()
     serializer_class            = StatusSerializer
 
@@ -102,15 +102,15 @@ class StatusCreateAPIView(generics.CreateAPIView):
     #     return qs
 
 class StatusUpdateAPIView(generics.UpdateAPIView):
-    permission_classes          = []
-    authentication_classes      = []
+    # permission_classes          = []
+    # authentication_classes      = []
     queryset                    = Status.objects.all()
     serializer_class            = StatusSerializer
     lookup_field = 'id'  # if the lookup_field is not defined then pk will be expected by default
 
 class StatusDeleteAPIView(generics.DestroyAPIView):
-    permission_classes          = []
-    authentication_classes      = []
+    # permission_classes          = []
+    # authentication_classes      = []
     queryset                    = Status.objects.all()
     serializer_class            = StatusSerializer
     lookup_field = 'id'  # if the lookup_field is not defined then pk will be expected by default

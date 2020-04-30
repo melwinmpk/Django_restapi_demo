@@ -11,7 +11,7 @@ class StatusSerializer(serializers.ModelSerializer):
             'content',
             'image'
         ]
-        # read_only_fields = ['user']
+        read_only_fields = ['user']
 
     def validate_content(self, value):
         if len(value) > 1000000:
@@ -19,7 +19,6 @@ class StatusSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        content = data.get("content", None)
         if content == "":
             content = None
         image = data.get("image", None)

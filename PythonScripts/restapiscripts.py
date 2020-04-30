@@ -8,25 +8,44 @@ ENDPOINT = "http://127.0.0.1:8000/api/status/"
 image_path = os.path.join(os.getcwd(), 'Screenshot(86).png')
 
 
-auth_data = {
-    'username': 'admin',
-    'password': '#welcome123'
-}
 
-r= requests.post(AUTH_ENDPOINT, data=auth_data)
-# print()
-token = r.json()['token']
 post_headers = {
-    'Content-Type': 'application/json'
+    "Content-Type": "application/json"
+}
+auth_data = {
+"username": "admin",
+"password": "#welcome123"
 }
 
-refreshauth_data = {
-    'token': token
+post_method   = requests.post(AUTH_ENDPOINT, data=json.dumps(auth_data), headers=post_headers)
+access_token = post_method.json()["access"]
+# print(access_token)
+
+post_headers = {
+    # "Content-Type": "application/json",
+    "Authorization": "Bearer "+access_token,
 }
+if image_path is not None:
+    with open(image_path, 'rb') as image:
+        file_data = {
+            'image': image
+        }
+        data = {
+            "content": "new Content-Type NEW 1"
+        }
+        post_data = json.dumps(data)
+        # post_response = requests.post(ENDPOINT, data=data, headers=post_headers, files=file_data) # , files=file_data
+        post_response = requests.put(ENDPOINT+str("24"), data=data, headers=post_headers, files=file_data)  # , files=file_data
+        # r = requests.request(method, ENDPOINT, data=data, files=file_data, headers=headers)
+        print(post_response.text)
+else:
+    data = {
+        "content": "new Content-Type NEW 1"
+    }
+    post_data = json.dumps(data)
+    post_response = requests.post(ENDPOINT, data=data, headers=post_headers) # , files=file_data
 
-tokrnrefresh_request = requests.post(REFRESHAUTH_ENDPOINT, data=json.dumps(refreshauth_data), headers=post_headers)
 
-print(tokrnrefresh_request.json())
 
 # get_endpoint = ENDPOINT + str(12)
 # post_data = json.dumps({"content": "Some random content"})
@@ -34,6 +53,9 @@ print(tokrnrefresh_request.json())
 # r = requests.get(get_endpoint)
 # print(r.text)
 #
+
+
+
 # r2 = requests.get(ENDPOINT)
 # print(r2.status_code)
 #

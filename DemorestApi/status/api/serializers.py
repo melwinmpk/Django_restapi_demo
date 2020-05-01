@@ -19,6 +19,7 @@ class StatusSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
+        content = data.get("content", None)
         if content == "":
             content = None
         image = data.get("image", None)

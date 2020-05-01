@@ -2,7 +2,8 @@ import requests
 import json
 import os
 
-AUTH_ENDPOINT = "http://127.0.0.1:8000/api/auth/jwt/"
+AUTH_ENDPOINT1 = "http://127.0.0.1:8000/api/accounts/auth/"
+AUTH_ENDPOINT = "http://127.0.0.1:8000/api/accounts/auth/jwt/"
 REFRESHAUTH_ENDPOINT = "http://127.0.0.1:8000/api/auth/jwt/refresh/"
 ENDPOINT = "http://127.0.0.1:8000/api/status/"
 image_path = os.path.join(os.getcwd(), 'Screenshot(86).png')
@@ -17,10 +18,11 @@ auth_data = {
 "password": "#welcome123"
 }
 
-post_method   = requests.post(AUTH_ENDPOINT, data=json.dumps(auth_data), headers=post_headers)
-access_token = post_method.json()["access"]
-# print(access_token)
+post_method   = requests.post(AUTH_ENDPOINT1, data=json.dumps(auth_data), headers=post_headers)
+access_token = post_method.json()
+print(post_method.json())
 
+'''
 post_headers = {
     # "Content-Type": "application/json",
     "Authorization": "Bearer "+access_token,
@@ -34,8 +36,8 @@ if image_path is not None:
             "content": "new Content-Type NEW 1"
         }
         post_data = json.dumps(data)
-        # post_response = requests.post(ENDPOINT, data=data, headers=post_headers, files=file_data) # , files=file_data
-        post_response = requests.put(ENDPOINT+str("24"), data=data, headers=post_headers, files=file_data)  # , files=file_data
+        post_response = requests.post(ENDPOINT, data=data, headers=post_headers, files=file_data) # , files=file_data
+        # post_response = requests.put(ENDPOINT+str("24"), data=data, headers=post_headers, files=file_data)  # , files=file_data
         # r = requests.request(method, ENDPOINT, data=data, files=file_data, headers=headers)
         print(post_response.text)
 else:
@@ -46,7 +48,7 @@ else:
     post_response = requests.post(ENDPOINT, data=data, headers=post_headers) # , files=file_data
 
 
-
+'''
 # get_endpoint = ENDPOINT + str(12)
 # post_data = json.dumps({"content": "Some random content"})
 #

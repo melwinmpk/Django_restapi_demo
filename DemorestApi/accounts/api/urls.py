@@ -19,23 +19,12 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from .views import AuthView
 from accounts.api.utils import MyTokenObtainPairSerializer, MyTokenObtainPairView
 
-from updates.views import (
-    json_example_view,
-    JsonCBV,JsonCBV2,
-    SerizlizedListView,
-    SerizlizedDetailView
-)
 
 urlpatterns = [
-    path('json/example',json_example_view, name=''),
-    path('json/classexample1',JsonCBV.as_view(), name=''),
-    path('json/classexample2',JsonCBV2.as_view(), name=''),
-    path('json/serialized/list',SerizlizedListView.as_view(), name=''),
-    path('json/serialized/detail',SerizlizedDetailView.as_view(), name=''),
-    path('api/upadtes/',include('updates.api.urls')),
-    path('api/status/',include('status.api.urls')),
-    path('api/accounts/auth/', include('accounts.api.urls')), # TokenObtainPairView.as_view()
-    path('admin/', admin.site.urls),
+path('', AuthView.as_view(), name='token_obtain_pair'), # TokenObtainPairView.as_view()
+    path('jwt/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'), # TokenObtainPairView.as_view()
+    path('jwt/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

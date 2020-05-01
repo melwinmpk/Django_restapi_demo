@@ -4,3 +4,4 @@ Scripts/*
 tcl/*
 LICENSE.txt
 workon Django_restapi_demo
+__pycache__

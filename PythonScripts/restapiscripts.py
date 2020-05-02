@@ -2,7 +2,8 @@ import requests
 import json
 import os
 
-AUTH_ENDPOINT1 = "http://127.0.0.1:8000/api/accounts/auth/"
+AUTH_ENDPOINT1 = "http://127.0.0.1:8000/api/accounts/auth/" # api/accounts/auth/
+REGISTER_ENDPOINT = "http://127.0.0.1:8000/api/accounts/auth/register/" # api/accounts/auth/
 AUTH_ENDPOINT = "http://127.0.0.1:8000/api/accounts/auth/jwt/"
 REFRESHAUTH_ENDPOINT = "http://127.0.0.1:8000/api/auth/jwt/refresh/"
 ENDPOINT = "http://127.0.0.1:8000/api/status/"
@@ -11,17 +12,31 @@ image_path = os.path.join(os.getcwd(), 'Screenshot(86).png')
 
 
 post_headers = {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    # "Authorization": "Bearer "+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTg4NDM4Nzc1LCJqdGkiOiJkODhmZGIwNDExODc0NmE3OTgyZjAyZDlkMGMxNjdmNCIsInVzZXJfaWQiOjF9.rlvcJrH2pieex0afbPUas5r5buitwc6WR_QaKgsVnwI',
 }
 auth_data = {
-"username": "admin",
+"username": "admin@gmail.com", #"admin"
 "password": "#welcome123"
 }
+# post_method   = requests.post(AUTH_ENDPOINT1, data=json.dumps(auth_data), headers=post_headers)
+# post_method   = requests.post(AUTH_ENDPOINT1, data=json.dumps(auth_data), headers=post_headers)
+# access_token = post_method.json()
+# print(post_method.json())
 
-post_method   = requests.post(AUTH_ENDPOINT1, data=json.dumps(auth_data), headers=post_headers)
+''' Register Request '''
+post_headers = {
+    "Content-Type": "application/json",
+}
+register_data = {
+"email": "melwin1@gmail.com",
+"username": "Melwin1", #"admin"
+"password": "1234",
+"password2": "1234"
+}
+post_method   = requests.post(REGISTER_ENDPOINT, data=json.dumps(register_data), headers=post_headers)
 access_token = post_method.json()
 print(post_method.json())
-
 '''
 post_headers = {
     # "Content-Type": "application/json",

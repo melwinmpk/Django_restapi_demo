@@ -15,6 +15,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     password2  = serializers.CharField(style={'input_type': 'password2'}, write_only=True)
     token      = serializers.SerializerMethodField(read_only=True)
     expires    = serializers.SerializerMethodField(read_only=True)
+    message    = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User
         fields = [
@@ -24,12 +25,16 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             'password2',
             'token',
             'expires',
+            'message',
         ]
         extra_kwargs = {'password': {'write_only': True}}
 
+    def get_message(self, obj):
+        return "Thank You For Registering. Please Verify Your  Email Before Continuing."
 
     def get_expires(self,obj):
         return timezone.now() + expire_delta - datetime.timedelta(seconds=20)
+
     def validate_email(self, value):
         qs = User.objects.filter(email__iexact=value)
         if qs.exists():
@@ -61,5 +66,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             username = validated_data.get('username'),
             email    = validated_data.get('email'),
             password = validated_data.get('password'))
+        user_obj.is_active = False
         user_obj.save()
+
         return user_obj

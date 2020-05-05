@@ -29,8 +29,8 @@ post_headers = {
     "Content-Type": "application/json",
 }
 register_data = {
-"email": "tc10@gmail.com",
-"username": "tc10", #"admin"
+"email": "tc13@gmail.com",
+"username": "tc13", #"admin"
 "password": "1234",
 "password2": "1234"
 }

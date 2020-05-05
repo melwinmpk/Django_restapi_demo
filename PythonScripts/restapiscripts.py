@@ -29,8 +29,8 @@ post_headers = {
     "Content-Type": "application/json",
 }
 register_data = {
-"email": "tc3@gmail.com",
-"username": "tc3", #"admin"
+"email": "tc10@gmail.com",
+"username": "tc10", #"admin"
 "password": "1234",
 "password2": "1234"
 }
@@ -41,7 +41,7 @@ print(post_method.json())
 post_headers = {
     # "Content-Type": "application/json",
     "Authorization": "Bearer "+access_token,
-}
+}  
 if image_path is not None:
     with open(image_path, 'rb') as image:
         file_data = {

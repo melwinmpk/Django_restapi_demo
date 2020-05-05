@@ -1,22 +1,35 @@
-from django.contrib.auth import get_user_model
-from rest_framework import serializers
+import datetime
 
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.settings import api_settings
+
+expire_delta        =   api_settings.REFRESH_TOKEN_LIFETIME
 User = get_user_model()
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
-    password2 = serializers.CharField(style={'input_type': 'password2'}, write_only=True)
+    # password   = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password2  = serializers.CharField(style={'input_type': 'password2'}, write_only=True)
+    token      = serializers.SerializerMethodField(read_only=True)
+    expires    = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User
         fields = [
             'username',
             'email',
             'password',
-            'password2'
+            'password2',
+            'token',
+            'expires',
         ]
         extra_kwargs = {'password': {'write_only': True}}
 
+
+    def get_expires(self,obj):
+        return timezone.now() + expire_delta - datetime.timedelta(seconds=20)
     def validate_email(self, value):
         qs = User.objects.filter(email__iexact=value)
         if qs.exists():
@@ -28,7 +41,14 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         if qs.exists():
             raise serializers.ValidationError("Email Already exist")
         return value
-
+    def get_token(self, obj):
+        user = obj
+        refresh = RefreshToken.for_user(user)
+        result = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
+        return result
     def validate(self, data):
         pw = data.get('password')
         pw2 = data.pop('password2')

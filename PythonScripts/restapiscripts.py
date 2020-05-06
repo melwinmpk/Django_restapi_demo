@@ -27,10 +27,11 @@ auth_data = {
 ''' Register Request '''
 post_headers = {
     "Content-Type": "application/json",
+    "Authorization": "Bearer "+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTg4NzY1OTc0LCJqdGkiOiI3ZWYzYjFlMzE2NGY0YTQ1OTA0YjkwMTNlODkwOTU3NiIsInVzZXJfaWQiOjE2fQ.ChbQJmFuRBopNyKl8MdNBHERoH7qvZPVekRWRvW4jOs',
 }
 register_data = {
-"email": "tc13@gmail.com",
-"username": "tc13", #"admin"
+"email": "tc15@gmail.com",
+"username": "tc15", #"admin"
 "password": "1234",
 "password2": "1234"
 }
